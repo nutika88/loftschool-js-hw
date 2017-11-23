@@ -26,13 +26,13 @@ function defaultParameterValue(a, b = 100) {
  Количество переданных аргументов заранее неизвестно
  */
 function returnArgumentsArray() {
-	var args = []; 	
+	var argsArray = [];
 	
 	for( var i = 0; i < arguments.length; i++ ){
-		args.push(arguments[i]);
+        argsArray.push(arguments[i]);
 	}
 	
-	return args;	
+	return argsArray;
 }
 
 /*
@@ -51,11 +51,11 @@ function returnFnResult(fn) {
  При вызове F, переданное число должно быть увеличено на единицу и возвращено из F
  */
 function returnCounter(number = 0) {
-	F(){
-		return number + 1;
-	};
+	function F(){
+        return ++number;
+    }
 
-	return F();
+	return F;
 }
 
 /*
