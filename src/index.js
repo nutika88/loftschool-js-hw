@@ -65,6 +65,36 @@ function returnCounter(number = 0) {
  Функция должна привязать переданные аргументы к функции F и вернуть получившуюся функцию
  */
 function bindFunction(fn) {
+	let args = [];
+	
+	// Собираем аргументы без fn
+	for(let i = 0; i < arguments.length; i++){
+		if(typeof arguments[i] !== "function"){
+			args.push(arguments[i]);
+		}						
+	}
+
+	return function(){
+		let additional = [];
+		
+		// Собираем аргументы функции
+		for(let i = 0; i < arguments.length; i++){				
+			additional.push(arguments[i]);										
+		}
+		
+		// Перевязка переданных атрибутов
+		// Передаём null так как не используем перевязку контекста		 
+		return fn.apply(null, args.concat(additional));
+	}
+	
+	// Вариант с использованием slice :)
+	/*
+	let args = Array.prototype.slice.call(arguments, 1);
+	return function() {
+	  let additional = Array.prototype.slice.call(arguments, 0);
+	  return fn.apply(null, args.concat(additional));
+	};
+	*/
 }
 
 export {
