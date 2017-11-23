@@ -6,7 +6,7 @@
  Функция должна принимать один аргумент и возвращать его
  */
 function returnFirstArgument(arg) {
-	return arg;
+    return arg;
 }
 
 /*
@@ -16,7 +16,7 @@ function returnFirstArgument(arg) {
  Значение по умолчанию второго аргумента должно быть 100
  */
 function defaultParameterValue(a, b = 100) {
-	return a + b;
+    return a + b;
 }
 
 /*
@@ -26,13 +26,13 @@ function defaultParameterValue(a, b = 100) {
  Количество переданных аргументов заранее неизвестно
  */
 function returnArgumentsArray() {
-	var argsArray = [];
-	
-	for( var i = 0; i < arguments.length; i++ ){
-        argsArray.push(arguments[i]);
-	}
-	
-	return argsArray;
+    var args = [];
+
+    for (var i = 0; i < arguments.length; i++) {
+        args.push(arguments[i]);
+    }
+
+    return args;
 }
 
 /*
@@ -41,7 +41,7 @@ function returnArgumentsArray() {
  Функция должна принимать другую функцию и возвращать результат вызова переданной функции
  */
 function returnFnResult(fn) {
-	return fn();
+    return fn();
 }
 
 /*
@@ -51,11 +51,11 @@ function returnFnResult(fn) {
  При вызове F, переданное число должно быть увеличено на единицу и возвращено из F
  */
 function returnCounter(number = 0) {
-	function F(){
+    function F() {
         return ++number;
     }
 
-	return F;
+    return F;
 }
 
 /*
@@ -65,36 +65,36 @@ function returnCounter(number = 0) {
  Функция должна привязать переданные аргументы к функции F и вернуть получившуюся функцию
  */
 function bindFunction(fn) {
-	let args = [];
-	
-	// Собираем аргументы без fn
-	for(let i = 0; i < arguments.length; i++){
-		if(typeof arguments[i] !== "function"){
-			args.push(arguments[i]);
-		}						
-	}
+    let args = [];
 
-	return function(){
-		let additional = [];
-		
-		// Собираем аргументы функции
-		for(let i = 0; i < arguments.length; i++){				
-			additional.push(arguments[i]);										
-		}
-		
-		// Перевязка переданных атрибутов
-		// Передаём null так как не используем перевязку контекста		 
-		return fn.apply(null, args.concat(additional));
-	}
-	
-	// Вариант с использованием slice :)
-	/*
-	let args = Array.prototype.slice.call(arguments, 1);
-	return function() {
-	  let additional = Array.prototype.slice.call(arguments, 0);
-	  return fn.apply(null, args.concat(additional));
-	};
-	*/
+    // Собираем аргументы без fn
+    for (let i = 0; i < arguments.length; i++) {
+        if (typeof arguments[i] !== 'function') {
+            args.push(arguments[i]);
+        }
+    }
+
+    return function () {
+        let additional = [];
+
+        // Собираем аргументы функции
+        for (let i = 0; i < arguments.length; i++) {
+            additional.push(arguments[i]);
+        }
+
+        // Перевязка переданных атрибутов
+        // Передаём null так как не используем перевязку контекста
+        return fn.apply(null, args.concat(additional));
+    };
+
+    // Вариант с использованием slice :)
+    /*
+     let args = Array.prototype.slice.call(arguments, 1);
+     return function() {
+        let additional = Array.prototype.slice.call(arguments, 0);
+        return fn.apply(null, args.concat(additional));
+     };
+     */
 }
 
 export {
