@@ -79,7 +79,6 @@ let filterInput = homeworkContainer.querySelector('#filter-input');
 let filterResult = homeworkContainer.querySelector('#filter-result');
 let townsPromise = loadTowns();
 let townsArray = [];
-let townsHtml = '';
 
 townsPromise.then((towns) => {
     townsArray = towns;
