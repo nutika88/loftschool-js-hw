@@ -73,16 +73,35 @@ function isMatching(full, chunk) {
     return full.toLowerCase().includes(chunk.toLowerCase());
 }
 
-// let loadingBlock = homeworkContainer.querySelector('#loading-block');
-// let filterBlock = homeworkContainer.querySelector('#filter-block');
+let loadingBlock = homeworkContainer.querySelector('#loading-block');
+let filterBlock = homeworkContainer.querySelector('#filter-block');
 let filterInput = homeworkContainer.querySelector('#filter-input');
 let filterResult = homeworkContainer.querySelector('#filter-result');
 let townsPromise = loadTowns();
 let townsArray = [];
 
-townsPromise.then((towns) => {
-    townsArray = towns;
-});
+function fulfillment(array) {
+    loadingBlock.style.display = 'none';
+    filterBlock.style.display = 'block';
+
+    townsArray = array;
+}
+
+function rejection(reason) {
+    let button = document.createElement('button');
+
+    button.innerHTML = 'Повторить';
+    loadingBlock.innerHTML = 'Не удалось загрузить города';
+    loadingBlock.innerHTML += 'Произошла ошибка: '+reason;
+    loadingBlock.appendChild(button);
+
+    button.addEventListener(() => {
+        loadingBlock.innerHTML = 'Загрузка...';
+        townsPromise.then(fulfillment, rejection);
+    });
+}
+
+townsPromise.then(fulfillment, rejection);
 
 filterInput.addEventListener('keyup', () => {
     var val = filterInput.value.trim();
