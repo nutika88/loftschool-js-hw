@@ -1,3 +1,5 @@
+import { createCookie, deleteCookie } from 'index.js';
+
 /**
  * ДЗ 7.2 - Создать редактор cookie с возможностью фильтрации
  *
@@ -39,14 +41,16 @@ let addValueInput = homeworkContainer.querySelector('#add-value-input');
 let addButton = homeworkContainer.querySelector('#add-button');
 let listTable = homeworkContainer.querySelector('#list-table tbody');
 
+filterCookies();
+
 filterNameInput.addEventListener('keyup', function() {
     filterCookies(filterNameInput.value);
 });
 
-addButton.addEventListener('click', () => {
+addButton.addEventListener('click', function () {
+    createCookie(addNameInput.value.trim(), addValueInput.value.trim());
+    filterCookies(filterNameInput.value);
 });
-
-filterCookies();
 
 /**
  * Функция фильтрирует cookie соответственно значению тектового поля и показывает в таблице только те cookie,
@@ -61,16 +65,18 @@ function filterCookies(value) {
     // Очищаем содержимое таблицы для вывода нового фильтрованного контента
     listTable.innerHTML = '';
 
-    // Проходит по всем cookie
-    Object.keys(cookies).forEach(item => {
-        if (value == '' || value == undefined) {
-            // Выводим в таблицу все cookie
+    // Если в поле фильтра пусто, то выводятся все доступные cookie
+    if (value == '' || value == undefined) {
+        Object.keys(cookies).forEach(item => {
             createCookieTableRow(item, cookies[item]);
-        } else if (isMatching(cookies[item], value) || isMatching(item, value)) {
-            // Выводим в таблицу только те cookie, в имени или значении которых есть введенное значение
-            createCookieTableRow(item, cookies[item]);
-        }
-    });
+        });
+    } else { // Выводим в таблицу только те cookie, в имени или значении которых есть введенное значение
+        Object.keys(cookies).forEach(item => {
+            if (isMatching(cookies[item], value) || isMatching(item, value)) {
+                createCookieTableRow(item, cookies[item]);
+            }
+        });
+    }
 }
 
 /**
@@ -79,9 +85,7 @@ function filterCookies(value) {
  * @returns {object}
  */
 function getCookiesObj() {
-    let allCookies = "wp-settings-time-1=1512993821; em_cdn_uid=t%3D1498133933182%26u%3Dd4a0191343b843c6afe0ab12ca51f137; _ga=GA1.1.1254560425.1498116515; em_p_uid=l:1500034320866|t:1498133933578|u:84202eca5ba040cbbbd28724835fafc1; __atuvc=0%7C41%2C0%7C42%2C0%7C43%2C0%7C44%2C27%7C45; zf_poll_vote_ans_mrbS9DB2MIK46pI4mLZZ6CF9G0OwE7lz=mrbS9DB2MIK46pI4mLZZ6CF9G0OwE7lz; zf_poll_vote_tvoImS9k4oBtZcWjN4Q4wrywS95Hd2qw=tvoImS9k4oBtZcWjN4Q4wrywS95Hd2qw; zf_poll_vote_ans_m1z46q67=m1z46q67; zf_poll_vote_n1730dr9=n1730dr9; PHPSESSID=g7rti0g3323m20laa7b8nf46i9";
-
-    return allCookies // todo document.cookie
+    return document.cookie
         .split('; ')
         .filter(Boolean)
         .map(cookie => cookie.match(/^([^=]+)=(.+)/))
@@ -105,8 +109,8 @@ function isMatching(full, chunk) {
 }
 
 /**
- * Функция добовляет cookie в таблицу
- * Добавляет слушатель для удаления cookie из таблицы и браузера
+ * Функция добовляет cookie в HTML таблицу
+ * Добавляет слушатель для удаления cookie из HTML таблицы и браузера
  *
  * @param {string} name - имя cookie
  * @param {string} value - значение cookie
@@ -140,7 +144,7 @@ function createCookieTableRow (name, value) {
 }
 
 /**
- * Remove cookie from HTML table
+ * Функция удаления cookie из HTML таблицы
  *
  * @param {object} elem - элемент внутри <td>
  */
