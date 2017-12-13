@@ -1,4 +1,4 @@
-import { createCookie, deleteCookie } from 'index.js';
+import { createCookie, deleteCookie } from './index.js';
 
 /**
  * ДЗ 7.2 - Создать редактор cookie с возможностью фильтрации
